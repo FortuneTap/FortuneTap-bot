@@ -48,8 +48,8 @@ class TapCommand(discord.ext.commands.Cog):
             await interaction.response.send_message("Formato de dados inválido. Usa {d20 dice format}, por ejemplo, 1d20 o 2d6.")
 
     @app_commands.command(name="str", description="Realiza una tirada de dados.")
-    @app_commands.describe(dice="El formato de dados, como 1d20 o 2d6", advantage="Ventaja o desventaja", plot="Activar tirada de trama")
-    async def tap(self, interaction: discord.Interaction, advantage: str = None, plot: bool = False):
+    @app_commands.describe(advantage="Ventaja o desventaja", plot="Activar tirada de trama")
+    async def str(self, interaction: discord.Interaction, advantage: str = None, plot: bool = False):
         server_id = str(interaction.guild_id)
         user_id = str(interaction.user.id)
         character : Character = self.character_repo.retrieve_character(server_id, user_id)
