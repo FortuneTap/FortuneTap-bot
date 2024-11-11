@@ -1,3 +1,26 @@
 {
-    "stack": "heroku-22"
- }
+    "name": "Selenium App on Heroku",
+    "description": "A web scraping app using Selenium deployed on Heroku",
+    "repository": "https://github.com/tu-repo",
+    "stack": "heroku-24",
+    "buildpacks": [
+      { "url": "heroku/python" }
+    ],
+    "env": {
+      "PYTHONUNBUFFERED": {
+        "description": "Ensure that Python output is not buffered.",
+        "value": "1"
+      },
+      "GOOGLE_CHROME_BIN": {
+        "description": "Path to Google Chrome binary",
+        "value": "/usr/bin/google-chrome"
+      },
+      "CHROMEDRIVER_PATH": {
+        "description": "Path to ChromeDriver binary",
+        "value": "/app/.chromedriver/bin/chromedriver"
+      }
+    },
+    "scripts": {
+      "postdeploy": "bash setup.sh"
+    }
+  }
