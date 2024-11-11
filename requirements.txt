@@ -1,3 +1,8 @@
 d20
 discord.py
 python-dotenv
+lxml
+requests
+pytest
+requests_mock
+playwright

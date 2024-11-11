@@ -19,7 +19,8 @@ async def on_ready():
 
 # Cargar los módulos de comandos
 async def load_extensions():
-    await bot.load_extension("cogs.tap")
+    await bot.load_extension("cogs.tap_cog")
+    await bot.load_extension("cogs.import_cog")
 
 # Ejecutar el bot
 async def main():
