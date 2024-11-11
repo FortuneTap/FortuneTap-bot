@@ -22,7 +22,7 @@ async def on_ready():
 character_repo = InMemoryCharacterRepository()
 # Cargar los módulos de comandos
 async def load_extensions():
-    await bot.load_extension("cogs.tap_cog")
+    await bot.load_extension("cogs.tap_cog", character_repo=character_repo)
     await bot.load_extension("cogs.import_cog", character_repo=character_repo)
 
 # Ejecutar el bot
