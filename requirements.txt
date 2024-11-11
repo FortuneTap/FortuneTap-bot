@@ -5,6 +5,4 @@ lxml
 requests
 pytest
 requests_mock
-selenium
-lxml
-chromedriver-autoinstaller
+playwright
