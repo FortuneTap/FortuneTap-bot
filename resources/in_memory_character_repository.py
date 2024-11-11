@@ -10,7 +10,7 @@ class InMemoryCharacterRepository(CharacterRepository):
         key = f"{server_id}-{user_id}"
         self.store[key] = character.to_json()  # Almacena como JSON
 
-    def retrieve_character(self, server_id: str, user_id: str) -> Optional:
+    def retrieve_character(self, server_id: str, user_id: str) -> Character:
         key = f"{server_id}-{user_id}"
         character_json = self.store.get(key)
         if character_json:

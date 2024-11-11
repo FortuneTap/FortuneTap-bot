@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from domain.character import Character
 
 class CharacterRepository(ABC):
     @abstractmethod
@@ -8,6 +8,6 @@ class CharacterRepository(ABC):
         pass
 
     @abstractmethod
-    def retrieve_character(self, server_id: str, user_id: str) -> Optional:
+    def retrieve_character(self, server_id: str, user_id: str) -> Character:
         """Recupera un personaje para un usuario específico en un servidor."""
         pass
