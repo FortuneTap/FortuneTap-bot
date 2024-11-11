@@ -3,6 +3,8 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
+from resources.in_memory_character_repository import InMemoryCharacterRepository
+
 # Cargar el token desde el archivo .env
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -17,10 +19,11 @@ async def on_ready():
     await bot.tree.sync()
     print(f"{bot.user} está listo y los comandos slash están sincronizados.")
 
+character_repo = InMemoryCharacterRepository()
 # Cargar los módulos de comandos
 async def load_extensions():
     await bot.load_extension("cogs.tap_cog")
-    await bot.load_extension("cogs.import_cog")
+    await bot.load_extension("cogs.import_cog", character_repo=character_repo)
 
 # Ejecutar el bot
 async def main():

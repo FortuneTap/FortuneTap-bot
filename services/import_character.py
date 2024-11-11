@@ -1,5 +1,6 @@
 from lxml import etree
 from playwright.async_api import async_playwright
+from domain.character import Character
 
 async def get_rendered_html(url):
     """Usa Playwright para obtener el HTML renderizado de una página."""
@@ -22,11 +23,13 @@ async def import_character_data(url):
     html_content = await get_rendered_html(url)
     tree = etree.HTML(html_content)
 
+    # Extraer el nombre del personaje (adaptar XPath si es necesario)
+    name = tree.xpath("//div[contains(@class, 'character-name')]/text()")
+    name = name[0].strip() if name else "Unknown Character"
+
     # Diccionario para almacenar los datos del personaje
-    character_data = {
-        "attributes": {},
-        "skills": {}
-    }
+    attributes = {}
+    skills = {}
 
     # Diccionario de rutas XPath para cada atributo
     attribute_xpaths = {
@@ -46,7 +49,7 @@ async def import_character_data(url):
     # Extraer y almacenar cada atributo usando XPath
     for attr, path in attribute_xpaths.items():
         result = tree.xpath(path)
-        character_data["attributes"][attr] = result[0].strip() if result else "N/A"
+        attributes[attr] = result[0].strip() if result else "N/A"
 
     # Extraer habilidades (skills) usando XPath
     skill_rows = tree.xpath("//div[contains(@class, 'skill-row')]")
@@ -54,6 +57,7 @@ async def import_character_data(url):
         skill_name = row.xpath(".//div[contains(@class, 'skill-name')]/text()")
         skill_value = row.xpath(".//div[contains(@class, 'skill-modifier')]/text()")
         if skill_name and skill_value:
-            character_data["skills"][skill_name[0].strip()] = skill_value[0].strip()
+            skills[skill_name[0].strip()] = skill_value[0].strip()
 
-    return character_data
+    character = Character(name=name, attributes=attributes, skills=skills)
+    return character
