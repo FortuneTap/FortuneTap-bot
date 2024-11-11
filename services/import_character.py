@@ -1,33 +1,25 @@
 from lxml import etree
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from playwright.async_api import async_playwright
 
-def get_rendered_html(url):
-    """Usa Selenium para obtener el HTML renderizado de una página."""
-    # Configuración del navegador con Selenium
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")  # Ejecutar en modo headless
-    browser = webdriver.Chrome(options=options)
+async def get_rendered_html(url):
+    """Usa Playwright para obtener el HTML renderizado de una página."""
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        page = await browser.new_page()
+        await page.goto(url)
+        
+        # Esperar hasta que el nombre del personaje esté visible en la página
+        await page.wait_for_selector("#sheet-desktop-header > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-grid-xs-6.grid-block.header-character-container.css-yjeeko > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.grid-block.header-character-name-container.css-jjdzd4 > div:nth-child(1) > div.MuiGrid-root.MuiGrid-item.text-block.character-name.css-1ipveys", timeout=30000)
+        
+        # Obtener el contenido HTML de la página después de la carga completa
+        html_content = await page.content()
+        await browser.close()
+        
+        return html_content
 
-    # Navegar a la URL
-    browser.get(url)
-
-    # Esperar hasta que el nombre del personaje esté visible en la página
-    WebDriverWait(browser, 30).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "#sheet-desktop-header > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-grid-xs-6.grid-block.header-character-container.css-yjeeko > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.grid-block.header-character-name-container.css-jjdzd4 > div:nth-child(1) > div.MuiGrid-root.MuiGrid-item.text-block.character-name.css-1ipveys"))
-    )
-
-    # Obtener el contenido HTML de la página después de la carga completa
-    html_content = browser.page_source
-    browser.quit()
-    
-    return html_content
-
-def import_character_data(url):
+async def import_character_data(url):
     """Función que obtiene y parsea los datos del personaje desde Demiplane usando XPath."""
-    html_content = get_rendered_html(url)
+    html_content = await get_rendered_html(url)
     tree = etree.HTML(html_content)
 
     # Diccionario para almacenar los datos del personaje
