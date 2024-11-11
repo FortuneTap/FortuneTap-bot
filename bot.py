@@ -2,7 +2,6 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-import chromedriver_setup
 
 # Cargar el token desde el archivo .env
 load_dotenv()

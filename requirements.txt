@@ -6,3 +6,5 @@ requests
 pytest
 requests_mock
 playwright
+fastapi
+uvicorn
