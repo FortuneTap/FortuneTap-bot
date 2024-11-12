@@ -61,6 +61,7 @@ class Skills:
 @dataclass
 class Character:
     character_id: str
+    avatar: str
     name: str
     attributes: Attributes
     defenses: Defenses
