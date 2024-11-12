@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from domain.character import Character
+from domain.entities.character import Character
 
 class CharacterRepository(ABC):
     @abstractmethod

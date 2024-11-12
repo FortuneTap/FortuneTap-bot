@@ -1,6 +1,6 @@
 import json
 from resources.character_repository import CharacterRepository
-from domain.character import Character
+from domain.entities.character import Character
 
 class InMemoryCharacterRepository(CharacterRepository):
     def __init__(self):

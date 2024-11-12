@@ -1,6 +1,6 @@
 from lxml import etree
 from playwright.async_api import async_playwright
-from domain.character import Character
+from domain.entities.character import Character
 
 async def get_rendered_html(url):
     """Usa Playwright para obtener el HTML renderizado de una página."""

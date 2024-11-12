@@ -1,13 +1,12 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from services import import_character  # Importa la función de extracción de datos
-from domain.character import Character
+from domain.entities.character import Character
+from services import import_character
 
 class ImportCharacter(commands.Cog):
-    def __init__(self, bot, character_repo):
+    def __init__(self, bot):
         self.bot = bot
-        self.character_repo = character_repo
 
     @app_commands.command(name="import", description="Importa un personaje desde Demiplane con la URL de su hoja.")
     async def import_character(self, interaction: discord.Interaction, url: str):
@@ -25,7 +24,7 @@ class ImportCharacter(commands.Cog):
         # Almacena el personaje en el repositorio
         server_id = str(interaction.guild_id)
         user_id = str(interaction.user.id)
-        self.character_repo.store_character(server_id, user_id, character)
+        #self.character_repo.store_character(server_id, user_id, character)
 
         # Crear el embed
         embed = discord.Embed(title=f"Datos del Personaje: {character.name}", color=discord.Color.blue())

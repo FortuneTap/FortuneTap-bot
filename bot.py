@@ -19,11 +19,10 @@ async def on_ready():
     await bot.tree.sync()
     print(f"{bot.user} está listo y los comandos slash están sincronizados.")
 
-character_repo = InMemoryCharacterRepository()
 # Cargar los módulos de comandos
 async def load_extensions():
-    await bot.load_extension("cogs.tap_cog", character_repo=character_repo)
-    await bot.load_extension("cogs.import_cog", character_repo=character_repo)
+    await bot.load_extension("cogs.tap_cog")
+    # await bot.load_extension("cogs.import_cog")
 
 # Ejecutar el bot
 async def main():
