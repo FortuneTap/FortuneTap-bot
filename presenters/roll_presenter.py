@@ -7,9 +7,9 @@ class RollPresenter:
     def __init__(self, interaction: discord.Interaction):
         self.interaction = interaction
 
-    async def roll(self, roll_result: d20.RollResult):
+    async def roll(self, roll_result: d20.RollResult, title : str = "Tapping Fortune 🎲"):
         embed = discord.Embed(
-            title=f"Tapping Fortune 🎲",
+            title=title,
             description=f"**Result:** {roll_result}",
             color=discord.Color.gold()
         )

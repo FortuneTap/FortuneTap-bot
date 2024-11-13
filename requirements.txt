@@ -6,3 +6,7 @@ requests
 pytest
 requests_mock
 playwright
+redis
+psycopg2-binary
+sqlalchemy
+dataclasses-json

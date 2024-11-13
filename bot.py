@@ -1,13 +1,9 @@
-import os
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
 
-from resources.in_memory_character_repository import InMemoryCharacterRepository
+import config
 
-# Cargar el token desde el archivo .env
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
+
 
 # Configuración de los intents y el cliente del bot
 intents = discord.Intents.default()
@@ -22,12 +18,12 @@ async def on_ready():
 # Cargar los módulos de comandos
 async def load_extensions():
     await bot.load_extension("cogs.tap_cog")
-    await bot.load_extension("cogs.import_cog")
+    await bot.load_extension("cogs.character_cog")
 
 # Ejecutar el bot
 async def main():
     await load_extensions()
-    await bot.start(TOKEN)
+    await bot.start(config.DISCORD_TOKEN)
 
 import asyncio
 asyncio.run(main())

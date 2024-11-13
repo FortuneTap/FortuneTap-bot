@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import List
+from dataclasses_json import dataclass_json
 
+@dataclass_json
 @dataclass
 class Attributes:
     strength: int
@@ -10,6 +12,7 @@ class Attributes:
     awareness: int
     presence: int
 
+@dataclass_json
 @dataclass
 class Defenses:
     physical: int
@@ -17,26 +20,26 @@ class Defenses:
     spiritual: int
     deflect: int
 
-@dataclass
-class Derived:
-    movement: int
-    recovery_die: int
-    senses_range: int
-
+@dataclass_json
 @dataclass
 class Resources:
     health: int
     health_max: int
     focus: int
     focus_max: int
-    investitute: int
+    investiture: int
     investiture_max: int
+    movement: int
+    recovery_die: int
+    senses_range: int
 
+@dataclass_json
 @dataclass
 class Skill:
     proficiency: int
     modifier: int
 
+@dataclass_json
 @dataclass
 class Skills:
     athletics: Skill
@@ -58,14 +61,21 @@ class Skills:
     persuasion: Skill
     survival: Skill
 
+@dataclass_json
 @dataclass
 class Character:
     character_id: str
     avatar: str
     name: str
+    ancestry: str
+    paths: List
     attributes: Attributes
     defenses: Defenses
     resources: Resources
-    derived: Derived
     skills: Skills
     expertises: List[str]
+    actions: List
+    equipament: List
+    goals: List
+
+

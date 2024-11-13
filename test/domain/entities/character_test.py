@@ -28,7 +28,7 @@ class TestCharacterSerialization(unittest.TestCase):
                 health_max=20,
                 focus=5,
                 focus_max=5,
-                investitute=0,
+                investiture=0,
                 investiture_max=0
             ),
             derived=Derived(
