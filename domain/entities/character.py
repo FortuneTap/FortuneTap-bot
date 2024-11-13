@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 from dataclasses_json import dataclass_json
+from enum import Enum
 
 @dataclass_json
 @dataclass
@@ -60,6 +61,35 @@ class Skills:
     perception: Skill
     persuasion: Skill
     survival: Skill
+
+class ActionCost(Enum):
+    REACTION = "r"
+    FREE = "0"
+    ACTION_1 = "1"
+    ACTION_2 = "2"
+    ACTION_3 = "3"
+    # REACTION = "↶"
+    # FREE = "▷"
+    # ACTION_1 = "▶"
+    # ACTION_2 = "▶▶"
+    # ACTION_3 = "▶▶▶"
+
+class ActionType(Enum):
+    BASIC = "Basic"
+    WEAPON = "Weapon"
+
+@dataclass_json
+@dataclass
+class Action:
+    name: str
+    description: str
+    type : ActionType
+    cost : ActionCost
+    focus: Optional[int] = 0
+    investiture : Optional[int] = 0
+
+# focus-resource-action-button
+
 
 @dataclass_json
 @dataclass

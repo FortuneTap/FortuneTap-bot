@@ -1,7 +1,8 @@
 from lxml import etree
 from playwright.async_api import async_playwright
-from domain.entities.character import Character, Attributes, Skills, Skill, Defenses, Resources
+from domain.entities.character import Character, Attributes, Skills, Skill, Defenses, Resources, Action, ActionCost, ActionType
 import config
+import json
 
 async def get_rendered_html(url):
     """Usa Playwright para obtener el HTML renderizado de una página."""
@@ -11,13 +12,13 @@ async def get_rendered_html(url):
         await page.goto(url)
         
         # Esperar hasta que el nombre del personaje esté visible en la página
-        await page.wait_for_selector("#sheet-desktop-header > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-grid-xs-6.grid-block.header-character-container.css-yjeeko > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.grid-block.header-character-name-container.css-jjdzd4 > div:nth-child(1) > div.MuiGrid-root.MuiGrid-item.text-block.character-name.css-1ipveys", timeout=30000)
-        
+        await page.wait_for_selector("#character-sheet > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.grid-block.sheet-center-content-container.css-6cg40x > div > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.grid-block.center-section-inner-container.center-section-inner-container--expanded.css-10p3pq5 > div > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-direction-xs-column.grid-block.cognitive-facet-wrapper.facet-wrapper.css-174hmyf > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.grid-block.raise-the-stakes-wrapper.css-10p3pq5 > div > div > div")
         # Obtener el contenido HTML de la página después de la carga completa
         html_content = await page.content()
         await browser.close()
         
         return html_content
+
 
 async def import_character_data(url, user_id, guild_id):
     """Función que obtiene y parsea los datos del personaje desde Demiplane y lo almacena."""
@@ -30,7 +31,7 @@ async def import_character_data(url, user_id, guild_id):
 
     # Crear la instancia de Character con los datos extraídos
     character = Character(
-        character_id=None,
+        character_id= url.split('/')[-1],
         avatar=tree.xpath("//img[contains(@class, 'avatar__image')]/@src")[0],
         name=name,
         attributes=Attributes(
@@ -132,14 +133,24 @@ async def import_character_data(url, user_id, guild_id):
                 modifier=int(tree.xpath("//div[contains(@class, 'skill-row-survival')]//div[contains(@class, 'skill-modifier')]/text()")[0].strip())
             )
         ),
-        expertises=[],
-        ancestry=tree.xpath("//div[contains(@class, 'header-name-subtitle-ancestry')]/text()")[0].strip(),
+        expertises = tree.xpath("//div[contains(@class, 'expertises-box')]//div[contains(@class, 'text-block__text')]/text()")[0].strip().split(', '),
+        ancestry = tree.xpath("//div[contains(@class, 'header-name-subtitle-ancestry')]/text()")[0].strip(),
         paths=[],
-        actions=[],
+        actions = [
+            Action(
+                    name = action.xpath(".//div[contains(@class, 'stacked-title__title')]/text()")[0].strip(),
+                    description = (' '.join(action.xpath(".//div[contains(@class, 'column--traits')]/text()")[0].strip().replace('\n', '').split())
+                     if action.xpath(".//div[contains(@class, 'column--traits')]/text()") else None),
+                    cost = ActionCost(action.xpath(".//div[contains(@class, 'icon-font')]/div/text()")[0].strip()),
+                    type= ActionType.BASIC
+                )
+            for action in tree.xpath("//div[contains(@class, 'sheet-box-component--basic-actions')]//div[contains(@class, 'builder-table-row')]")
+        ],
         equipament=[],
         goals=[]
     )
 
+#stacked-title__title
 
     # Almacenar el personaje en el repositorio de la aplicación
     config.REPOSITORY.save(user_id, guild_id, character)
