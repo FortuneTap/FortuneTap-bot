@@ -1,9 +1,7 @@
 import discord
 from discord.ext import commands
-
-import config
-
-
+import asyncio
+import adapters.config as config
 
 # Configuración de los intents y el cliente del bot
 intents = discord.Intents.default()
@@ -25,5 +23,5 @@ async def main():
     await load_extensions()
     await bot.start(config.DISCORD_TOKEN)
 
-import asyncio
+
 asyncio.run(main())

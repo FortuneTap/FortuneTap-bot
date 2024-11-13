@@ -23,11 +23,5 @@ class PlotDieResultType(Enum):
 
 @dataclass
 class PlotDieResult:
-    result_type: PlotDieResultType  # Puede ser OPPORTUNITY, COMPLICATION, o NOTHING
-    complication_value: Optional[int] = None  # Puede ser None, 2, o 4 en caso de complicación
-
-    def apply_complication(self, roll_value: int) -> int:
-        """Si es una complicación, aplica el valor de complicación a la tirada dada."""
-        if self.result_type == PlotDieResultType.COMPLICATION and self.complication_value:
-            return roll_value + self.complication_value
-        return roll_value
+    result: PlotDieResultType  # Puede ser OPPORTUNITY, COMPLICATION, o NOTHING
+    plus: Optional[int] = 0  # Puede ser None, 2, o 4 en caso de complicación
